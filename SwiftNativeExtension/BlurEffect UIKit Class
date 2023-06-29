@@ -1,0 +1,31 @@
+class BlurEffectView: UIVisualEffectView {
+    
+    var animator = UIViewPropertyAnimator(duration: 1, curve: .linear)
+    
+    override func didMoveToSuperview() {
+        guard let superview = superview else { return }
+        backgroundColor = .clear
+        frame = superview.bounds //либо можно наложить частично на вью констрейтами
+        setupBlur()
+    }
+    
+    private func setupBlur() {
+        animator.stopAnimation(true)
+        effect = nil
+
+        animator.addAnimations { [weak self] in
+            self?.effect = UIBlurEffect(style: .dark)
+        }
+        animator.fractionComplete = 0.95   //Интенсивность блюра от 0 до 1
+    }
+    
+    deinit {
+        animator.stopAnimation(true)
+    }
+}
+
+//MARK: - Usage
+//нужно установить прозрачный фон для вью, к которой применяется, а так же добавить класс как бэкраунд вьюху
+        view.backgroundColor = .clear
+        view.let blurEffectView = BlurEffectView()
+        view.backgroundView = blurEffectView
