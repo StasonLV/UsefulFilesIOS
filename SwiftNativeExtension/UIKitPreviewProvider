@@ -1,0 +1,33 @@
+//For in ViewController Use
+
+import SwiftUI
+@available(iOS 13.0, *)
+struct ViewControllerPreview: UIViewControllerRepresentable {
+    
+    let viewControllerGenerator: () -> UIViewController
+    
+    init(viewControllerGenerator: @escaping () -> UIViewController) {
+        self.viewControllerGenerator = viewControllerGenerator
+    }
+    
+    @available(iOS 13.0.0, *)
+    func makeUIViewController(context: Context) -> some UIViewController {
+        viewControllerGenerator()
+    }
+    
+    func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
+    }
+    struct ViewControllerProvider: PreviewProvider {
+
+    static var previews: some View {
+
+    ViewControllerPreview {
+
+        CallSessionViewController(openViduSession: OpenViduSession.configure(OpenViduConfiguration.init(url: "", token: "", sessionId: "", userName: "")))
+
+    }.edgesIgnoringSafeArea(.all)
+
+    }
+
+    }
+}
