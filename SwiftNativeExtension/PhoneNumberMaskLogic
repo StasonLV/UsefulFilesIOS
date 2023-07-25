@@ -1,0 +1,31 @@
+//MARK: - method for formatting string
+
+    private func formattedNumber(number: String) -> String {
+        let cleanPhoneNumber = number.components(separatedBy: CharacterSet.decimalDigits.inverted).joined()
+        let mask = "(###) ###-##-##"
+        var result = ""
+        var index = cleanPhoneNumber.startIndex
+        for ch in mask where index < cleanPhoneNumber.endIndex {
+            if ch == "#" {
+                result.append(cleanPhoneNumber[index])
+                index = cleanPhoneNumber.index(after: index)
+            } else {
+                result.append(ch)
+            }
+        }
+        return result
+    }
+
+
+    //MARK: - method to add in UITextFieldDelegate
+
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string:  String) -> Bool {
+        guard let cell = self.cellForRow(at: [0, 0]) as? BasicEditingCell else { return true }             //if we need specific row
+        if textField == cell.singleLineTextInput {
+            guard let text = textField.text else { return false }
+            let newString = (text as NSString).replacingCharacters(in: range, with: string)
+            textField.text = formattedNumber(number: newString)
+            return string == " " //return false  //return string if we need phone suggestions in this textfield
+        } else {
+            return true
+        }
