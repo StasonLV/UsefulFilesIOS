@@ -1,0 +1,29 @@
+//MARK: - Gesture to pinch any type of UIView
+@objc func handlePinch(_ gesture: UIPinchGestureRecognizer) {
+        guard let viewToScale = gesture.view else { return }
+
+        if gesture.state == .began {
+            viewToScale.transform = viewToScale.transform.scaledBy(x: gesture.scale, y: gesture.scale)
+            gesture.scale = 1.0
+        }
+
+        if gesture.state == .changed {
+            viewToScale.transform = viewToScale.transform.scaledBy(x: gesture.scale, y: gesture.scale)
+            gesture.scale = 1.0
+        }
+
+        if gesture.state == .ended {
+            UIView.animate(withDuration: 0.3) {
+                viewToScale.transform = CGAffineTransform.identity
+            }
+        }
+    }
+
+//MARK: - adding gesture to UIView
+
+    private func addPinchGesture() {
+        let pinchGesture = UIPinchGestureRecognizer(target: self,
+                                                    action: #selector(handlePinch)
+        )
+        self.localVideoContainerView.addGestureRecognizer(pinchGesture)
+    }
