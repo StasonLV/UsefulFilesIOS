@@ -1,0 +1,39 @@
+blur with tinted edge (Apple Music like)
+
+class UpwardsBlurEdge: UIVisualEffectView {
+    
+    lazy var grad: CAGradientLayer = {
+        let g = CAGradientLayer()
+        g.colors = [
+            UIColor.appBlackColor.cgColor,
+            UIColor.clear.cgColor
+        ]
+        g.startPoint = CGPoint(x: 0.5, y: 0.4)
+        g.endPoint = CGPoint(x: 0.5, y: 0)
+        layer.mask = g
+        return g
+    }()
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        grad.frame = bounds
+    }
+}
+ USAGE WITH
+
+extension UIView {
+    func addBlurEffect(style: UIBlurEffect.Style) {
+        self.backgroundColor = UIColor.clear
+        let blurEffect = UIBlurEffect(style: style)
+        let blurEffectView = UpwardsBlurEdge(effect: blurEffect)
+        blurEffectView.frame = self.bounds
+        blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        
+        if (self is UICollectionView) {
+            (self as! UICollectionView).backgroundView = blurEffectView
+        } else {
+            self.addSubview(blurEffectView)
+            self.insertSubview(blurEffectView, belowSubview: self)
+        }
+    }
+}
